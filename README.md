@@ -1,112 +1,205 @@
-## **Prerequisites**
 
-Before running this notebook, ensure you have the following libraries installed and understand the underlying concepts:
+# 🚀 **Azure Machine Learning: Step-by-Step Pipelining**  
 
-### Required Libraries:
+Welcome to the **Azure Machine Learning: Step-by-Step Pipelining** repository! 🎉 This repository is your one-stop guide to learning how to build and deploy machine learning pipelines using Azure ML. The codes are 100% reproducible and it is beginner-friendly.  
 
-- **PyTorch**: A deep learning framework essential for building and training neural networks. PyTorch supports flexible and efficient computation for model architectures like GRU (Gated Recurrent Units).
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f277cfa9-c2d9-4a6d-9766-e60e42b4a102" alt="Azure ML Pipeline Illustration" width="700" />
+</p>
 
-- **GRU (Gated Recurrent Unit)**: A type of Recurrent Neural Network (RNN) used for handling sequential data, commonly employed in time series or NLP tasks due to its ability to capture long-term dependencies efficiently.
-
-- **NumPy**: A fundamental library for numerical computations. NumPy is crucial for data manipulation and mathematical operations, such as matrix operations and feature extraction, that are often performed during model training.
-
-### Concepts to Be Familiar With:
-
-- **Training and Testing Machine Learning Models**: Understanding how models are trained (fitting them to training data) and tested (evaluating performance on unseen data) is essential.
-  
-- **API Endpoints**: Learn how to deploy models as RESTful APIs, which will enable easy interaction with the model for real-time inference in production environments.
 
 ---
 
-## **Why Use Pipelines in AI and ML?**
+## 📂 **Repository Structure**  
 
-While deploying machine learning models directly to cloud platforms like **Microsoft Azure ML**, **AWS**, or **Google Cloud AI** is common, it doesn’t fully address the challenges that arise as the model lifecycle grows in complexity. Pipelines automate and streamline the model development and deployment process, handling both simple and complex use cases effectively.
+Here's a quick look at the repository contents:  
 
-### Example Scenario:
+```plaintext
+📦 Repository
+├── 📂 model
+│   ├── 📄 new_model_state_dict.pth
+│   ├── 📄 vocab.txt
+├── 📂 scripts
+│   ├── 📄 score.py
+│   ├── 📄 script1.py
+│   ├── 📄 script2.py
+│   ├── 📄 script3.py
+│   ├── 📄 script4.py
+├── 📂 workspace
+│   ├── 📄 dataset.csv
+│   ├── 📄 env.yml
+├── 🖼️ Pipeline_Structure.png
+├── 📄 README.md
+└── 📄 readme_MLOps.ipynb
 
-Imagine deploying an updated model that performs the same task as the previous model but with improved performance. How would you manage the update?
+```
 
-- Would you deploy the new model to a **second REST endpoint** and eventually decommission the old endpoint?
-- As the complexity of the task grows (e.g., predicting cricket scores with real-time match parameters), managing multiple models and ensuring smooth updates becomes more difficult.
+## 📂 Folder Overview
 
-The solution is to automate the entire workflow using **pipelines**.
+### 📂 `model`
+- Contains pre-trained models and vocabulary files.
+  - 📄 `new_model_state_dict.pth`: The saved state dictionary of the model.
+  - 📄 `vocab.txt`: Vocabulary used by the model.
 
-### The Key Role of **Pipelines**:
+### 📂 `scripts`
+- Includes Python scripts for various stages of the pipeline.
+  - 📄 `score.py`: Script to evaluate the model's performance.
+  - 📄 `script1.py`: First stage of the CI pipeline (e.g., data preprocessing).
+  - 📄 `script2.py`: Second stage of the CI pipeline (e.g., model training).
+  - 📄 `script3.py`: Third stage of CI pipeline (e.g., old and new model (the one after training) comparison).
+  - 📄 `script4.py`: The first and only stage of the CD Pipeline that is triggered only if new model is better than the old one.
 
-Pipelines automate data preprocessing, model training, evaluation, and deployment, addressing challenges such as:
+### 📂 `workspace`
+- Workspace-related files like datasets and environment configurations.
+  - 📄 `dataset.csv`: Dataset used for training and evaluation.
+  - 📄 `env.yml`: Conda environment file to set up dependencies.
 
-- Ensuring model updates, retraining, and deployment happen seamlessly without manual intervention.
-- Providing **access control** to restrict who can modify specific parts of the process, ensuring data and model integrity.
-- Enabling scalable workflows that can handle growing datasets and complex models.
+### 🖼️ `Pipeline_Structure.png`
+- Diagram illustrating the pipeline's structure or workflow.
 
----
+### 📄 `README.md`
+- Main documentation file providing an overview of the repository.
 
-## **Goals of Pipelines in AI/ML**:
-
-### 1. **Automation**:
-   - Pipelines automate the full machine learning lifecycle, from data ingestion to deployment. This reduces human error and ensures that processes are reproducible and efficient.
-   - Continuous Integration/Continuous Deployment (CI/CD) practices can be integrated into the pipeline, enabling frequent model updates without disrupting services.
-
-### 2. **Access Control and Security**:
-   - With pipelines, you can implement fine-grained access control over each stage of the machine learning workflow, preventing unauthorized changes.
-   - Security features ensure that sensitive data is handled properly at every stage of the pipeline.
-
-### 3. **Scalability and Reproducibility**:
-   - Pipelines can scale with the increasing size and complexity of your data and models, providing consistent results across different stages.
-   - Reproducibility is guaranteed, as each step in the pipeline is automated and versioned, making it easy to recreate experiments or debug issues.
-
-### 4. **Versioning and Collaboration**:
-   - Pipelines support version control, making it easy to track different versions of models and datasets, enabling better collaboration among team members.
-   - Each part of the pipeline (training, evaluation, deployment) can be updated independently without disrupting the rest of the process.
-
----
-
-## **Steps Involved in the Project**
-
-### 1. **Setup Workspace and Compute Resources**
-   - Set up an Azure workspace and provision compute resources (e.g., Azure Virtual Machines) for data processing and model training. These resources allow for efficient handling of large-scale operations.
-
-### 2. **Upload Files and Resources**
-   - Uploaded the pretrained model and `vocab.txt` to the Azure workspace, ensuring that these resources are available for future training and tokenization tasks.
-
-### 3. **Connect to Workspace**
-   - Established a secure connection to the Azure workspace using the Azure ML SDK. This allows seamless access to Azure resources for model management and execution of machine learning tasks.
-
-### 4. **Model Registration**
-   - Registered the pretrained model within Azure ML to facilitate versioning, easy access, and future training or deployment steps.
-
-### 5. **Upload Vocabulary File**
-   - Uploaded the `vocab.txt` file to the workspace, which contains the vocabulary required for tokenizing input data and training the model.
-
-### 6. **Dataset Preparation**
-   - Stored the `dataset.csv` in Azure Blob Storage, ensuring that it is accessible for preprocessing and model training. Blob Storage is ideal for large-scale data storage and efficient access during training.
-
-### 7. **script1.py: Data Preparation**
-   - Developed `script1.py` to preprocess the dataset. It tokenizes the input data, performs feature extraction, and splits it into training (`train_x`, `train_y`) and testing (`test_x`, `test_y`) sets. The preprocessed data is then saved for use in subsequent pipeline steps.
-
-### 8. **script2.py: Model Training**
-   - Created `script2.py` to fine-tune the pretrained model using the training data (`train_x`, `train_y`). The model is then registered and prepared for evaluation using the test data (`test_x`, `test_y`).
-
-### 9. **script3.py: Model Comparison and Evaluation**
-   - Implemented `script3.py` to evaluate both the old and new models using the test data (`test_x`, `test_y`). The performance comparison is recorded in an output file, where `True` indicates the new model performs better than the old one.
-
-### 10. **Pipeline for Model Training and Evaluation**
-    - Designed a pipeline to automate model training, evaluation, and comparison, ensuring reproducibility and efficiency. This pipeline can be run as part of a CI/CD workflow to streamline model updates.
-
-### 11. **score.py: Web Input Processing and Prediction**
-    - Developed `score.py` to process incoming data from web applications. It tokenizes the text using `vocab.txt`, feeds it to the trained model, and generates a prediction. This script is designed to handle real-time inference in production environments.
-
-### 12. **script4.py: Deployment Script**
-    - Wrote `script4.py` to automate the deployment of the latest model to an Azure endpoint. This script ensures that the model is ready to serve predictions based on incoming web requests.
-
-### 13. **Pipeline for Deployment**
-    - Built a deployment pipeline that automates the process of deploying models and serving them via API endpoints. This pipeline integrates model registration, deployment scripts, and scaling capabilities to ensure efficient deployment.
-
-### 14. **Function: MLOps**
-    - Developed the `MLOps` function to orchestrate both the training and deployment pipelines. By passing the name of the dataset as an argument, this function ensures the execution of model training followed by deployment, streamlining the end-to-end machine learning lifecycle.
+### 📄 `readme_MLOps.ipynb`
+- A Jupyter Notebook used to create this project and 100% reproducible.
 
 ---
 
-For Detailed steps, you can refer to readme_MLOps.ipynb file.
+## 🌟 **Prerequisites**  
 
-By following these steps, this project automates the entire machine learning lifecycle—from data preprocessing to model deployment—using Azure ML. The use of pipelines ensures that the process is efficient, reproducible, and scalable, while allowing for easy updates and model comparisons.
+Before you start, make sure you have the following installed and understand the basics:  
+
+### 📦 Required Libraries:  
+- **PyTorch**: For building and training neural networks.  
+- **NumPy**: For numerical operations and data manipulation.  
+
+### 📚 Concepts to Know:  
+- **Training and Testing Models**: Fit models to training data and evaluate them on test data.  
+- **API Endpoints**: Deploy models as RESTful APIs for real-time inference.  
+
+---
+
+## 🤔 **Why Use Pipelines in AI/ML?**  
+
+Pipelines simplify and automate the machine learning lifecycle, addressing challenges like:  
+- **Seamless Model Updates**: Automate retraining and deployment without manual intervention.  
+- **Access Control**: Restrict changes to specific workflow stages.  
+- **Scalability**: Handle growing datasets and complex models.  
+
+> **Example**: Need to deploy an updated model? Pipelines ensure the transition is smooth, avoiding downtime or conflicts.
+
+---
+
+## 🖼️ **Visual Workflow**  
+
+<p align="center">
+  <img src="https://github.com/Hyperspectral01/AzureML_Step-by-Step_Pipelining/blob/main/Pipeline_Structure.png" alt="Pipeline Steps" width="700" />
+</p>  
+
+---
+
+## 🛠️ **Steps Involved in the Project**  
+
+### 1️⃣ **Setup Workspace and Compute Resources**  
+- Set up an **Azure workspace** and provision compute resources (e.g., Azure Virtual Machines) for data processing and model training.  
+- These resources enable efficient handling of large-scale operations.  
+
+### 2️⃣ **Upload Files and Resources**  
+- Upload the pretrained model and `vocab.txt` to the Azure workspace.  
+- Ensure these resources are available for future training and tokenization tasks.  
+
+### 3️⃣ **Connect to Workspace**  
+- Establish a secure connection to the Azure workspace using the **Azure ML SDK**.  
+- This allows seamless access to Azure resources for model management and machine learning tasks.  
+
+### 4️⃣ **Model Registration**  
+- Register the pretrained model within Azure ML to facilitate:  
+  - Versioning  
+  - Easy access  
+  - Future training or deployment steps  
+
+### 5️⃣ **Upload Vocabulary File**  
+- Upload the `vocab.txt` file to the workspace.  
+- This file contains the vocabulary needed for tokenizing input data and training the model.  
+
+### 6️⃣ **Dataset Preparation**  
+- Store `dataset.csv` in **Azure Blob Storage** for easy access during preprocessing and model training.  
+- Blob Storage ensures efficient handling of large-scale data.  
+
+### 7️⃣ **script1.py: Data Preparation**  
+- Develop `script1.py` to preprocess the dataset:  
+  - Tokenize input data  
+  - Extract features  
+  - Split into training (`train_x`, `train_y`) and testing (`test_x`, `test_y`) sets  
+- Save the preprocessed data for use in subsequent pipeline steps.  
+
+### 8️⃣ **script2.py: Model Training**  
+- Create `script2.py` to fine-tune the pretrained model using the training data (`train_x`, `train_y`).  
+- Prepare the trained model for evaluation with test data (`test_x`, `test_y`).  
+
+### 9️⃣ **script3.py: Model Comparison and Evaluation**  
+- Implement `script3.py` to evaluate both old and new models using the test data (`test_x`, `test_y`).  
+- Record performance in an output file:  
+  - `True`: New model performs better  
+  - Otherwise, `False`  
+
+### 🔟 **Pipeline for Model Training and Evaluation**  
+- Design a pipeline to automate:  
+  - Model training  
+  - Evaluation  
+  - Comparison  
+- Ensure reproducibility and integrate it into a **CI/CD workflow** for efficient updates.  
+
+### 1️⃣1️⃣ **score.py: Web Input Processing and Prediction**  
+- Develop `score.py` to handle incoming data from web applications:  
+  - Tokenize text using `vocab.txt`  
+  - Feed it to the trained model  
+  - Generate predictions  
+- Designed for real-time inference in production environments.  
+
+### 1️⃣2️⃣ **script4.py: Deployment Script**  
+- Write `script4.py` to automate the deployment of the latest model to an **Azure endpoint**.  
+- Ensure the model is ready to serve predictions via web requests.  
+
+### 1️⃣3️⃣ **Pipeline for Deployment**  
+- Build a deployment pipeline that automates:  
+  - Model registration  
+  - Deployment scripts  
+  - Scaling capabilities  
+- Ensure efficient and seamless deployment.  
+
+### 1️⃣4️⃣ **Function: MLOps**  
+- Develop the `MLOps` function to orchestrate:  
+  - Training pipeline  
+  - Deployment pipeline  
+- By passing the dataset name as an argument, this function ensures smooth execution of the entire ML lifecycle.  
+
+---
+
+## 📊 **Results : Using the Endpoint** 
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8e67f6a7-8aea-42a1-88a4-103f38932578" alt="Results" width="700" />
+</p>
+
+## 🎯 **Key Benefits**  
+
+✅ **Automation**: Reduces errors and ensures reproducibility.  
+✅ **Versioning**: Track datasets, models, and workflows.  
+✅ **Scalability**: Handles large-scale operations efficiently.  
+✅ **Collaboration**: Supports team-based workflows with access control.  
+
+---
+
+## 🔗 **Extra Links**  
+
+- [What is MLOPS? (lang:Hindi)](https://www.youtube.com/watch?v=6SRifO6dmuE&t=664s&pp=ygUNd2hhdCBpcyBtbG9wcw%3D%3D)
+- [Brief Idea about Devops in Azure (lang:en)](https://www.youtube.com/watch?v=4BibQ69MD8c&t=71s)  
+- [Azure Machine Learning Documentation](https://learn.microsoft.com/en-us/azure/machine-learning/)  
+- [PyTorch Official Website](https://pytorch.org/)  
+- [NumPy Official Documentation](https://numpy.org/doc/)  
+
+---
+
+🎉 Thank you for exploring this project! Let's make ML workflows efficient and scalable with Azure Pipelines. 🚀  
+

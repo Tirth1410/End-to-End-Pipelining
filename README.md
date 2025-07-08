@@ -1,7 +1,7 @@
 
 # 🚀 **Azure Machine Learning: Step-by-Step Pipelining**  
 
-Welcome to the **Azure Machine Learning: Step-by-Step Pipelining** repository! 🎉 This repository is your one-stop guide to learning how to build and deploy machine learning pipelines using Azure ML. The codes are 100% reproducible and it is beginner-friendly.  
+Welcome to the **Azure Machine Learning: Step-by-Step Pipelining** repository! 🎉 This repository is your one-stop guide to learning how to build and deploy machine learning pipelines using Azure ML. The codes are 100% reproducible and it is beginner-friendly.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/f277cfa9-c2d9-4a6d-9766-e60e42b4a102" alt="Azure ML Pipeline Illustration" width="700" />
@@ -201,5 +201,5 @@ Pipelines simplify and automate the machine learning lifecycle, addressing chall
 
 ---
 
-🎉 Thank you for exploring this project! Let's make ML workflows efficient and scalable with Azure Pipelines. 🚀  
+🎉 Thank you for exploring this project! Let's make ML workflows efficient and scalable with Azure Pipelines.  
 
